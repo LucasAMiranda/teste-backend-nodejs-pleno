@@ -1,0 +1,111 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Minha API",
+      "description": "Descrição da minha API",
+      "version": "1.0.0"
+    },
+    "host": "localhost:3000",
+    "basePath": "/",
+    "schemes": [
+      "http",
+      "https"
+    ],
+    "paths": {
+      "/pessoas": {
+        "post": {
+          "summary": "Inserir uma nova pessoa",
+          "description": "Endpoint para inserir uma nova pessoa",
+          "parameters": [
+            {
+              "name": "pessoa",
+              "in": "body",
+              "description": "Objeto JSON com informações da nova pessoa",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Pessoa"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sucesso"
+            }
+          }
+        },
+        "get": {
+          "summary": "Listar todas as pessoas",
+          "description": "Endpoint para listar todas as pessoas",
+          "responses": {
+            "200": {
+              "description": "Sucesso"
+            }
+          }
+        }
+      },
+      "/pessoas/{id}": {
+        "put": {
+          "summary": "Atualizar uma pessoa existente",
+          "description": "Endpoint para atualizar uma pessoa existente",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID da pessoa a ser atualizada",
+              "required": true,
+              "type": "integer"
+            },
+            {
+              "name": "pessoa",
+              "in": "body",
+              "description": "Objeto JSON com informações atualizadas da pessoa",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Pessoa"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sucesso"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Deletar uma pessoa existente",
+          "description": "Endpoint para deletar uma pessoa existente",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID da pessoa a ser deletada",
+              "required": true,
+              "type": "integer"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Sucesso"
+            }
+          }
+        }
+      },
+      "/anotacoes": {
+        "post": {
+          "summary": "Inserir uma nova anotação",
+          "description": "Endpoint para inserir uma nova anotação",
+          "parameters": [
+            {
+              "name": "anotacao",
+              "in": "body",
+              "description": "Objeto JSON com informações da nova anotação",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Anotacao"
+              }
+            }
+          ]
+        }
+     }
+  }
+} 

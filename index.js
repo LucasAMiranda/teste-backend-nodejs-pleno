@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const axios = require('axios');
 const moment = require('moment');
+const swaggerDocument = require('./swagger.json');
 
 const port = 3000;
 const baseURL = `http://localhost:${port}`;
@@ -169,3 +170,6 @@ describe('Testes para os endpoints', () => {
     expect(response.data).toBeDefined();
   });
 });
+
+// Configuração do Swagger UI...
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
