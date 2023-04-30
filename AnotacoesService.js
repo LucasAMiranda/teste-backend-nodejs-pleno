@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const moment = require('moment');
-const { verifyToken } = require('./authMiddleware');
+const { verifyToken } = require('./env');
 const connection = require('./db');
 
 // consultar CEP na API externa
