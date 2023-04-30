@@ -111,3 +111,30 @@ app.get('/anotacoes', async (req, res) => {
   const [rows] = await connection.execute('SELECT * FROM anotacoes');
   res.json(rows);
 });
+
+//Criando a proteção do token API
+
+const token = jwt.sign({ user: 'admin' }, 'secret_key');
+
+// validar o token
+function verifyToken(req, res, next) {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).send('Token não fornecido');
+  }
+
+  jwt.verify(token, 'secret_key', (err, decoded) => {
+    if (err) {
+      return res.status(403).send('Token inválido');
+    }
+    req.user = decoded.user;
+    next();
+  });
+}
+
+//endpoint protegido por token
+app.get('/protegido', verifyToken, (req, res) => {
+  res.send('Este endpoint é protegido por token');
+});
