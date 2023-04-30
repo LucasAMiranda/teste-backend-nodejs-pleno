@@ -10,6 +10,10 @@ const swaggerUi = require('swagger-ui-express');
 const port = 3000;
 const baseURL = `http://localhost:${port}`;
 
+app.listen(port, () => {
+  console.log(`Server running on ${baseURL}`);
+});
+
 const connection = mysql.createConnection({
     host: 'localhost', // nome do host,
     user: 'root',
@@ -19,7 +23,13 @@ const connection = mysql.createConnection({
 });
 
 
-connection.connect();
+connection.connect((error) => {
+  if (error) {
+    console.error('Error connecting to database:', error);
+    return;
+  }
+  console.log('Connected to database');
+});
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
