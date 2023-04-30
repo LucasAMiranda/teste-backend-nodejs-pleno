@@ -5,8 +5,8 @@ const axios = require('axios');
 const moment = require('moment');
 const swaggerDocument = require('./swagger.json');
 const swaggerUi = require('swagger-ui-express');
-const jwt = require('jsonwebtoken');
-
+const jwt = require('jsonwebtoken')
+require('dotenv').config();
 
 const port = 3000;
 const baseURL = `http://localhost:${port}`;
@@ -16,11 +16,11 @@ app.listen(port, () => {
 });
 
 const connection = mysql.createConnection({
-    host: 'localhost', // nome do host,
-    user: 'root',
-    password: '',
-    database: 'backend',
-    port: '3306',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  port: process.env.DB_PORT
 });
 
 
@@ -38,8 +38,8 @@ app.use(express.json());
 
 
 //Criando a proteção do token API
-
-const token = jwt.sign({ user: 'admin' }, 'secret_key');
+const secretKey = process.env.SECRET_KEY;
+const token = jwt.sign({ user: 'admin' }, secretKey);
 
 // validar o token
 function verifyToken(req, res, next) {
@@ -50,7 +50,7 @@ function verifyToken(req, res, next) {
     return res.status(401).send('Token não fornecido');
   }
 
-  jwt.verify(token, 'secret_key', (err, decoded) => {
+  jwt.verify(token, secretKey, (err, decoded) => {
     if (err) {
       return res.status(403).send('Token inválido');
     }
@@ -58,11 +58,6 @@ function verifyToken(req, res, next) {
     next();
   });
 }
-
-//endpoint protegido por token
-app.get('/protegido', verifyToken, (req, res) => {
-  res.send('Este endpoint é protegido por token');
-});
 
 //Modelo Pessoas
 
@@ -90,7 +85,7 @@ app.put('/pessoas/:id', verifyToken, (req, res) => {
 });
 
 // listar todas as pessoas
-app.get('/pessoas', verifyToken, (req, res) => {
+app.get('/pessoas', (req, res) => {
   connection.query('SELECT * FROM pessoas', (error, results) => {
     if (error) throw error;
     res.send(results);
@@ -131,19 +126,12 @@ app.post('/anotacoes', verifyToken, async (req, res) => {
     res.sendStatus(201);
   } catch (error) {
     console.error(error);
-    res.sendStatus(500).json({ message: 'Ocorreu um erro ao criar a anotação' });;
+    res.sendStatus(500);
   }
 });
 
-
 // listar todas as anotações
-app.get('/anotacoes', verifyToken, async (req, res) => {
+app.get('/anotacoes', async (req, res) => {
   const [rows] = await connection.execute('SELECT * FROM anotacoes');
-  res.json(rows);
-});
-
-//ordenando os cadastros por data 
-app.get('/anotacoes', verifyToken, async (req, res) => {
-  const [rows] = await connection.execute('SELECT * FROM anotacoes ORDER BY data_cadastro DESC');
   res.json(rows);
 });
