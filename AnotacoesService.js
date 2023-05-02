@@ -2,8 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 const moment = require('moment');
-const { verifyToken } = require('./env');
-require('dotenv').config();
+const { verifyToken } = require('dotenv').config();
 const connection = require('./db');
 
 // consultar CEP na API externa
